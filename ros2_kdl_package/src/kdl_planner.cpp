@@ -23,8 +23,6 @@ KDLPlanner::KDLPlanner(double _trajDuration, Eigen::Vector3d _trajInit, double _
     trajInit_ = _trajInit;
     trajRadius_ = _trajRadius;
     trajEnd_ = _trajEnd;
-    
-
 }
 
 KDLPlanner::KDLPlanner(double _trajDuration, double _accDuration, Eigen::Vector3d _trajInit,Eigen::Vector3d _trajEnd,double _trajRadius)
@@ -34,6 +32,7 @@ KDLPlanner::KDLPlanner(double _trajDuration, double _accDuration, Eigen::Vector3
     trajRadius_ = _trajRadius;
     accDuration_ = _accDuration;
     trajEnd_=_trajEnd;
+
 }
 
 void KDLPlanner::CreateTrajectoryFromFrames(std::vector<KDL::Frame> &_frames,
@@ -119,17 +118,16 @@ trajectory_point KDLPlanner::compute_trajectory(double time)
 void KDLPlanner::trapezoidal_vel (double time, double accDuration_, double & s, double & s_dot, double & s_ddot) {
 
   double ddot_traj_c = -1.0/(std::pow(accDuration_,2)-trajDuration_*accDuration_);
-  //double ddot_traj_c = -1.0/(std::pow(accDuration_,2)-trajDuration_accDuration_)(trajEnd_-trajInit_);
 
   if ( time <=accDuration_) {
     s = 0.5 * ddot_traj_c * std::pow(time,2);
-    s_dot = ddot_traj_c * time; // we derive the previous
-    s_ddot = ddot_traj_c; // we derive the previous one
+    s_dot = ddot_traj_c * time; 
+    s_ddot = ddot_traj_c; 
 
   } 
   else if (time < trajDuration_ - accDuration_) {
     s= ddot_traj_c * accDuration_ * (time - accDuration_/2);
-    s_dot= ddot_traj_c * accDuration_; /// 
+    s_dot= ddot_traj_c * accDuration_; 
     s_ddot= 0.0;
 
   } 
@@ -142,6 +140,7 @@ void KDLPlanner::trapezoidal_vel (double time, double accDuration_, double & s, 
 }
 
 void KDLPlanner::cubic_polinomial (double time, double &s, double &s_dot, double &s_ddot) {
+
   double s_fin = 1;
   double t_f = trajDuration_; 
 
@@ -166,10 +165,8 @@ trajectory_point KDLPlanner::compute_linear_trajectory(double time){
   traj.pos[1] = trajInit_[1] + s*(trajEnd_[1] - trajInit_[1]);
   traj.pos[2] = trajInit_[2] + s*(trajEnd_[2] - trajInit_[2]);
 
-  //traj.vel[0] = s_dot*(trajEnd_[0] - trajInit_[0]);
   traj.vel[0] = s_dot*(trajEnd_[0] - trajInit_[0]);
   traj.vel[1] = s_dot*(trajEnd_[1] - trajInit_[1]);
-  //traj.vel[2] = s_dot*(trajEnd_[2] - trajInit_[2]);
   traj.vel[2] = s_dot*(trajEnd_[2] - trajInit_[2]);
 
   traj.acc[0] = s_ddot*(trajEnd_[0] - trajInit_[0]);
@@ -216,10 +213,8 @@ trajectory_point KDLPlanner::compute_linear_trajectory_trapezoidal(double time){
   traj.pos[1] = trajInit_[1] + s*(trajEnd_[1] - trajInit_[1]);
   traj.pos[2] = trajInit_[2] + s*(trajEnd_[2] - trajInit_[2]);
 
-  //traj.vel[0] = s_dot*(trajEnd_[0] - trajInit_[0]);
   traj.vel[0] = s_dot*(trajEnd_[0] - trajInit_[0]);
   traj.vel[1] = s_dot*(trajEnd_[1] - trajInit_[1]);
-  //traj.vel[2] = s_dot*(trajEnd_[2] - trajInit_[2]);
   traj.vel[2] = s_dot*(trajEnd_[2] - trajInit_[2]);
 
   traj.acc[0] = s_ddot*(trajEnd_[0] - trajInit_[0]);

@@ -62,7 +62,6 @@ public:
     // inverse kinematics
     void getInverseKinematics(KDL::Frame &f, KDL::JntArray &q);  
     void getInverseKinematicsVel(KDL::Twist &twist, KDL::JntArray &qdot);    
-    void getInverseKinematicsAcc(KDL::Twist &xe_dotdot, KDL::JntArray &qdotdot);                    
 
 private:
 

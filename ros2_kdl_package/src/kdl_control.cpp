@@ -9,11 +9,7 @@ KDLController::KDLController()
 {
     robot_ = nullptr;
 }
-/*
-void KDLController::setController(KDLRobot &_robot) {
-	robot_ = nullptr;
-}
-*/
+
 Eigen::VectorXd KDLController::idCntr(KDL::JntArray &_qd,
                                       KDL::JntArray &_dqd,
                                       KDL::JntArray &_ddqd,
@@ -44,18 +40,7 @@ Eigen::VectorXd KDLController::idCntr(KDL::Frame &_desPos,
     KDL::Twist vel_curr(robot_->getEEVelocity());
     //Eigen::Vector3d vel_ang_curr(robot_->getEEVelocity().rot.data);
     
-    
-    //read desidered state
-    //Eigen::Vector3d pos_des(_desPos.p.data);
-    //Eigen::Vector3d pos_ang_des(_desPos.M.data);
-    //Eigen::Vector3d vel_des(_desVel.vel.data);
-    //Eigen::Vector3d vel_ang_des(_desVel.rot.data);
-    //Eigen::Vector3d acc_des(_desAcc.vel.data);
-    //Eigen::Vector3d acc_ang_des(_desAcc.vel.data);
-
-    //space inertia matrix
-
-    //jacobian (analytic??)
+    //geometric jacobian
     KDL::Jacobian J = robot_->getEEJacobian();
     //pseudoinverse 
     Eigen::Matrix<double,7,6> pseudoJ = pseudoinverse(J.data);
@@ -69,6 +54,7 @@ Eigen::VectorXd KDLController::idCntr(KDL::Frame &_desPos,
     
     Vector6d error;
     Vector6d dot_error;
+
     //compute linear angular error
     computeErrors(_desPos,pos_curr,_desVel,vel_curr,error,dot_error);
 

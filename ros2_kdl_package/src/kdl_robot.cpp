@@ -46,15 +46,6 @@ void KDLRobot::getInverseKinematicsVel(KDL::Twist &twist, KDL::JntArray &qdot) {
     }
 }
 
-void KDLRobot::getInverseKinematicsAcc(KDL::Twist &xe_dotdot, KDL::JntArray &qdotdot) {
-    Eigen::VectorXd q = pseudoinverse(s_J_ee_.data) * 
-                        (toEigen(xe_dotdot) - s_J_dot_ee_.data * jntVel_.data);
-
-    for (unsigned int i = 0; i < q.size(); i++) {
-        qdotdot(i) = q(i);
-    }
-}
-
 void KDLRobot::setJntLimits(KDL::JntArray &q_low, KDL::JntArray &q_high)
 {
     q_min_ = q_low; q_max_ = q_high;
